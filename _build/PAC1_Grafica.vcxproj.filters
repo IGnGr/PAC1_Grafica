@@ -20,7 +20,7 @@
     <ClCompile Include="..\game\src\screen_ending.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\src\screen_gameplay.c">
+    <ClCompile Include="..\game\src\screen_gameplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\game\src\screen_logo.c">
@@ -30,6 +30,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\game\src\screen_title.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\src\screen_credits.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

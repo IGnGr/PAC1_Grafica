@@ -32,6 +32,7 @@
 static int framesCounter = 0;
 static int finishScreen = 0;
 
+
 //----------------------------------------------------------------------------------
 // Options Screen Functions Definition
 //----------------------------------------------------------------------------------
@@ -39,27 +40,41 @@ static int finishScreen = 0;
 // Options Screen Initialization logic
 void InitOptionsScreen(void)
 {
-    // TODO: Initialize OPTIONS screen variables here!
+    // TODO: Initialize Options screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+
 }
 
 // Options Screen Update logic
 void UpdateOptionsScreen(void)
 {
-    // TODO: Update OPTIONS screen variables here!
+    // TODO: Update Options screen variables here!
+
+    // Press enter or tap to change to ENDING screen
+    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+    {
+        finishScreen = 1;
+        PlaySound(fxCoin);
+    }
+
 }
 
 // Options Screen Draw logic
 void DrawOptionsScreen(void)
 {
-    // TODO: Draw OPTIONS screen here!
+    // TODO: Draw Options screen here!
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
+    Vector2 pos = { 20, 10 };
+    DrawTextEx(font, "Options SCREEN", pos, font.baseSize * 3.0f, 4, MAROON);
+    DrawText("TODO", 130, 220, 20, MAROON);
+
 }
 
 // Options Screen Unload logic
 void UnloadOptionsScreen(void)
 {
-    // TODO: Unload OPTIONS screen variables here!
+    // TODO: Unload Options screen variables here!
 }
 
 // Options Screen should finish?

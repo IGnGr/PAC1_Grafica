@@ -19,6 +19,7 @@
     #include <emscripten/emscripten.h>
 #endif
 
+
 //----------------------------------------------------------------------------------
 // Shared Variables Definition (global)
 // NOTE: Those variables are shared between modules through screens.h
@@ -27,12 +28,14 @@ GameScreen currentScreen = LOGO;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
+#define TITLE_FONT_SIZE font.baseSize * 2.0f
+#define STANDARD_TITLE_SPACING 4.0f
 
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
 //----------------------------------------------------------------------------------
-static const int screenWidth = 800;
-static const int screenHeight = 450;
+static const int screenWidth = 1280;
+static const int screenHeight = 720;
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -59,13 +62,13 @@ int main(void)
 {
     // Initialization
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "raylib game template");
+    InitWindow(screenWidth, screenHeight, "ASTEROIDS - PAC 1");
 
     InitAudioDevice();      // Initialize audio device
 
     // Load global data (assets that must be available in all screens, i.e. font)
-    font = LoadFont("resources/mecha.png");
-    music = LoadMusicStream("resources/ambient.ogg");
+    font = LoadFont("resources/Music/setback.png");
+    music = LoadMusicStream("resources/Music/MainMenuMusic.ogg");
     fxCoin = LoadSound("resources/coin.wav");
 
     SetMusicVolume(music, 1.0f);
@@ -97,6 +100,8 @@ int main(void)
         case TITLE: UnloadTitleScreen(); break;
         case GAMEPLAY: UnloadGameplayScreen(); break;
         case ENDING: UnloadEndingScreen(); break;
+        case CREDITS: UnloadCreditsScreen(); break;
+        case OPTIONS: UnloadOptionsScreen(); break;
         default: break;
     }
 
@@ -126,6 +131,8 @@ static void ChangeToScreen(GameScreen screen)
         case TITLE: UnloadTitleScreen(); break;
         case GAMEPLAY: UnloadGameplayScreen(); break;
         case ENDING: UnloadEndingScreen(); break;
+        case CREDITS: UnloadCreditsScreen(); break;
+        case OPTIONS: UnloadOptionsScreen(); break;
         default: break;
     }
 
@@ -136,6 +143,8 @@ static void ChangeToScreen(GameScreen screen)
         case TITLE: InitTitleScreen(); break;
         case GAMEPLAY: InitGameplayScreen(); break;
         case ENDING: InitEndingScreen(); break;
+        case CREDITS: InitCreditsScreen(); break;
+        case OPTIONS: InitOptionsScreen(); break;
         default: break;
     }
 
@@ -151,6 +160,8 @@ static void TransitionToScreen(GameScreen screen)
     transToScreen = screen;
     transAlpha = 0.0f;
 }
+
+
 
 // Update transition effect (fade-in, fade-out)
 static void UpdateTransition(void)
@@ -170,9 +181,10 @@ static void UpdateTransition(void)
             {
                 case LOGO: UnloadLogoScreen(); break;
                 case TITLE: UnloadTitleScreen(); break;
-                case OPTIONS: UnloadOptionsScreen(); break;
                 case GAMEPLAY: UnloadGameplayScreen(); break;
                 case ENDING: UnloadEndingScreen(); break;
+                case CREDITS: UnloadCreditsScreen(); break;
+                case OPTIONS: UnloadOptionsScreen(); break;
                 default: break;
             }
 
@@ -183,6 +195,8 @@ static void UpdateTransition(void)
                 case TITLE: InitTitleScreen(); break;
                 case GAMEPLAY: InitGameplayScreen(); break;
                 case ENDING: InitEndingScreen(); break;
+                case CREDITS: InitCreditsScreen(); break;
+                case OPTIONS: InitOptionsScreen(); break;
                 default: break;
             }
 
@@ -235,8 +249,10 @@ static void UpdateDrawFrame(void)
             {
                 UpdateTitleScreen();
 
-                if (FinishTitleScreen() == 1) TransitionToScreen(OPTIONS);
-                else if (FinishTitleScreen() == 2) TransitionToScreen(GAMEPLAY);
+                if (FinishTitleScreen() == 2) TransitionToScreen(OPTIONS);
+                else if (FinishTitleScreen() == 3) TransitionToScreen(GAMEPLAY);
+                else if (FinishTitleScreen() == 5) TransitionToScreen(CREDITS);
+
 
             } break;
             case OPTIONS:
@@ -252,6 +268,13 @@ static void UpdateDrawFrame(void)
 
                 if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
                 //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+
+            } break;
+            case CREDITS:
+            {
+                UpdateCreditsScreen();
+
+                if (FinishCreditsScreen()) TransitionToScreen(TITLE);
 
             } break;
             case ENDING:
@@ -279,7 +302,9 @@ static void UpdateDrawFrame(void)
             case TITLE: DrawTitleScreen(); break;
             case OPTIONS: DrawOptionsScreen(); break;
             case GAMEPLAY: DrawGameplayScreen(); break;
+            case CREDITS: DrawCreditsScreen(); break;
             case ENDING: DrawEndingScreen(); break;
+
             default: break;
         }
 

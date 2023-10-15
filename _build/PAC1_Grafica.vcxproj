@@ -145,6 +145,7 @@
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -263,8 +264,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\game\src\raylib_game.c" />
+    <ClCompile Include="..\game\src\screen_credits.c" />
     <ClCompile Include="..\game\src\screen_ending.c" />
-    <ClCompile Include="..\game\src\screen_gameplay.c" />
+    <ClCompile Include="..\game\src\screen_gameplay.cpp" />
     <ClCompile Include="..\game\src\screen_logo.c" />
     <ClCompile Include="..\game\src\screen_options.c" />
     <ClCompile Include="..\game\src\screen_title.c" />

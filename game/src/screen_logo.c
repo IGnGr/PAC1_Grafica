@@ -46,6 +46,8 @@ static int rightSideRecHeight = 0;
 static int state = 0;              // Logo animation states
 static float alpha = 1.0f;         // Useful for fading
 
+static Texture2D backgroundImage = { 0 };
+
 //----------------------------------------------------------------------------------
 // Logo Screen Functions Definition
 //----------------------------------------------------------------------------------
@@ -57,8 +59,7 @@ void InitLogoScreen(void)
     framesCounter = 0;
     lettersCount = 0;
 
-    logoPositionX = GetScreenWidth()/2 - 128;
-    logoPositionY = GetScreenHeight()/2 - 128;
+
 
     topSideRecWidth = 16;
     leftSideRecHeight = 16;
@@ -67,12 +68,18 @@ void InitLogoScreen(void)
 
     state = 0;
     alpha = 1.0f;
+
+    backgroundImage = LoadTexture("resources/textures/uoc.png");
+    
+
+    logoPositionX = GetScreenWidth() / 2 - backgroundImage.width/2;
+    logoPositionY = GetScreenHeight() / 2 - backgroundImage.height/2;
 }
 
 // Logo Screen Update logic
 void UpdateLogoScreen(void)
 {
-    if (state == 0)                 // State 0: Top-left square corner blink logic
+    /*if (state == 0)                 // State 0: Top-left square corner blink logic
     {
         framesCounter++;
 
@@ -100,6 +107,7 @@ void UpdateLogoScreen(void)
     {
         framesCounter++;
 
+
         if (lettersCount < 10)
         {
             if (framesCounter/12)   // Every 12 frames, one more letter!
@@ -121,13 +129,19 @@ void UpdateLogoScreen(void)
                 }
             }
         }
+    }*/
+    framesCounter++;
+
+    if (framesCounter > 200)
+    {
+            finishScreen = 1;   // Jump to next screen
     }
 }
 
 // Logo Screen Draw logic
 void DrawLogoScreen(void)
 {
-    if (state == 0)         // Draw blinking top-left square corner
+    /*if (state == 0)         // Draw blinking top-left square corner
     {
         if ((framesCounter/10)%2) DrawRectangle(logoPositionX, logoPositionY, 16, 16, BLACK);
     }
@@ -146,6 +160,7 @@ void DrawLogoScreen(void)
     }
     else if (state == 3)    // Draw "raylib" text-write animation + "powered by"
     {
+        
         DrawRectangle(logoPositionX, logoPositionY, topSideRecWidth, 16, Fade(BLACK, alpha));
         DrawRectangle(logoPositionX, logoPositionY + 16, 16, leftSideRecHeight - 32, Fade(BLACK, alpha));
 
@@ -157,13 +172,17 @@ void DrawLogoScreen(void)
         DrawText(TextSubtext("raylib", 0, lettersCount), GetScreenWidth()/2 - 44, GetScreenHeight()/2 + 48, 50, Fade(BLACK, alpha));
 
         if (framesCounter > 20) DrawText("powered by", logoPositionX, logoPositionY - 27, 20, Fade(DARKGRAY, alpha));
-    }
+    }*/
+
+    DrawTexture(backgroundImage, logoPositionX, logoPositionY, WHITE);
 }
 
 // Logo Screen Unload logic
 void UnloadLogoScreen(void)
 {
     // Unload LOGO screen variables here!
+
+    UnloadTexture(backgroundImage);
 }
 
 // Logo Screen should finish?

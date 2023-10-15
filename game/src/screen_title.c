@@ -26,12 +26,32 @@
 #include "raylib.h"
 #include "screens.h"
 
+#define MAX_OPTIONS 3
+#define PRESS_ENTER_TEXT "PRESS ENTER" 
+#define OPTIONS_TEXT "OPTIONS" 
+#define CREDITS_TEXT "CREDITS" 
+#define PLAY_TEXT "PLAY"
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+static int currentLogoPositionX = 0;
+static int currentLogoPositionY = 0;
+static int finalLogoPositionX = 0;
+static int finalLogoPositionY = 0;
+static int pressEnterPositionX = 0;
+static int pressEnterPositionY = 0;
+static int pressEnterOffsetFromTitle = 350;
+static int offsetBetweenMenuOptions = 100;
+static float alpha = 1.0f;         // Useful for fading
+static int cursorIndex = 0;
+static bool hasPressedEntered = false;
 
+GameScreen menuOptions[MAX_OPTIONS] = { GAMEPLAY,OPTIONS,CREDITS };
+Texture2D titleImage = { 0 };
+Texture2D cursorImage = { 0 };
+Sound cursorSound = { 0 };
 //----------------------------------------------------------------------------------
 // Title Screen Functions Definition
 //----------------------------------------------------------------------------------
@@ -42,36 +62,114 @@ void InitTitleScreen(void)
     // TODO: Initialize TITLE screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+    alpha = 1.0f;
+    //hasPressedEntered = false;
+
+    titleImage = LoadTexture("resources/textures/pixil-frame-0.png");
+    cursorImage = LoadTexture("resources/textures/SpaceShip.png");
+    cursorSound = LoadSound("resources/Sounds/shot.wav");
+
+    
+    if (!hasPressedEntered)
+    {
+        finalLogoPositionX = GetScreenWidth() / 2 - titleImage.width * 2.5 / 2;
+        finalLogoPositionY = GetScreenHeight() / 2 - titleImage.height * 4;
+
+        currentLogoPositionX = finalLogoPositionX;
+        currentLogoPositionY = -200; //Offset so it's outside the screen
+
+        pressEnterPositionX = GetScreenWidth() / 2 - MeasureTextEx(font, PRESS_ENTER_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2;
+        pressEnterPositionY = finalLogoPositionY + pressEnterOffsetFromTitle;
+    }
 }
 
 // Title Screen Update logic
 void UpdateTitleScreen(void)
 {
-    // TODO: Update TITLE screen variables here!
 
     // Press enter or tap to change to GAMEPLAY screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+    if (hasPressedEntered && (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)))
     {
-        //finishScreen = 1;   // OPTIONS
-        finishScreen = 2;   // GAMEPLAY
+        // Load next screen
+        finishScreen = menuOptions[cursorIndex];
+        PlaySound(cursorSound);
+    }
+
+    // TODO: Update TITLE screen variables here!
+    if (!hasPressedEntered && (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)))
+    {
+        hasPressedEntered = true;
+        PlaySound(cursorSound);
+
+    }
+
+
+    if (hasPressedEntered && (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)))
+    {
+
+        cursorIndex += 1;
+        if (cursorIndex >= MAX_OPTIONS) cursorIndex = 0;
         PlaySound(fxCoin);
     }
+
+    if (hasPressedEntered && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)))
+    {
+
+        cursorIndex -= 1;
+        if (cursorIndex < 0) cursorIndex = MAX_OPTIONS - 1;
+        PlaySound(fxCoin);
+    }
+
+
+    framesCounter++;
+
+    alpha -= 0.02f;
+
+    if (alpha <= 0.0f)
+    {
+        alpha = 1.0f;
+    }
+
+
+    if(currentLogoPositionY < finalLogoPositionY) currentLogoPositionY++;
 }
+
 
 // Title Screen Draw logic
 void DrawTitleScreen(void)
 {
     // TODO: Draw TITLE screen here!
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
-    Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "TITLE SCREEN", pos, font.baseSize*3.0f, 4, DARKGREEN);
-    DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
+
+    if (!hasPressedEntered)
+    {
+        DrawTextEx(font, PRESS_ENTER_TEXT, (Vector2) { pressEnterPositionX, pressEnterPositionY }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, Fade(DARKGREEN, alpha));
+    }
+
+    if (hasPressedEntered)
+    {
+        DrawTextEx(font, PLAY_TEXT, (Vector2) { GetScreenWidth() / 2 - MeasureTextEx(font, PLAY_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2, pressEnterPositionY }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
+        DrawTextEx(font, OPTIONS_TEXT, (Vector2) { GetScreenWidth() / 2 - MeasureTextEx(font, OPTIONS_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2, pressEnterPositionY + offsetBetweenMenuOptions }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
+        DrawTextEx(font, CREDITS_TEXT, (Vector2) { GetScreenWidth() / 2 - MeasureTextEx(font, CREDITS_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2, pressEnterPositionY + offsetBetweenMenuOptions * 2 }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
+        DrawTextureEx(cursorImage, (Vector2) { pressEnterPositionX - cursorImage.width * 2, pressEnterPositionY + cursorIndex * offsetBetweenMenuOptions }, 0, 1, WHITE);
+    }
+
+    //DrawText("+", pressEnterPositionX - 25, pressEnterPositionY + cursorIndex * 50, font.baseSize, MAROON);
+
+
+    DrawTextureEx(titleImage, (Vector2){ finalLogoPositionX, currentLogoPositionY }, 0, 3, WHITE);
+
+
+
 }
 
 // Title Screen Unload logic
 void UnloadTitleScreen(void)
 {
     // TODO: Unload TITLE screen variables here!
+    UnloadTexture(titleImage);
+    UnloadTexture(cursorImage);
+    UnloadSound(cursorSound);
 }
 
 // Title Screen should finish?
