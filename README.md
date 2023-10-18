@@ -10,6 +10,7 @@ PAC 1. A Raylib based version of the classic arcade game "Asteroids"
 
 Keyboard:
  - WASD or key arrows
+ - Space to shoot
 
 ### Screenshots
 
