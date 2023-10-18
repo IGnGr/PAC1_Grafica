@@ -2,7 +2,7 @@
 *
 *   raylib - Advance Game template
 *
-*   Credits Screen Functions Definitions (Init, Update, Draw, Unload)
+*   Options Screen Functions Definitions (Init, Update, Draw, Unload)
 *
 *   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 *
@@ -26,31 +26,33 @@
 #include "raylib.h"
 #include "screens.h"
 
-#define STANDARD_TITLE_SPACING 4.0f
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+static int selectedVolume = 0;
 
 
 //----------------------------------------------------------------------------------
-// Credits Screen Functions Definition
+// Options Screen Functions Definition
 //----------------------------------------------------------------------------------
 
-// Credits Screen Initialization logic
-void InitCreditsScreen(void)
+// Options Screen Initialization logic
+void InitOptionsScreen(void)
 {
-    // TODO: Initialize Credits screen variables here!
+    // TODO: Initialize Options screen variables here!
     framesCounter = 0;
     finishScreen = 0;
 
+
+    selectedVolume = volumeLevel * 10;
 }
 
-// Credits Screen Update logic
-void UpdateCreditsScreen(void)
+// Options Screen Update logic
+void UpdateOptionsScreen(void)
 {
-    // TODO: Update Credits screen variables here!
+    // TODO: Update Options screen variables here!
 
     // Press enter or tap to change to ENDING screen
     if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
@@ -59,37 +61,52 @@ void UpdateCreditsScreen(void)
         PlaySound(fxCoin);
     }
 
+    if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT))
+    {
+        if(selectedVolume > 0) selectedVolume--;
+    }
+
+    if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT))
+    {
+        if (selectedVolume < 10) selectedVolume++;
+    }
+
+
+    volumeLevel = selectedVolume / 10.0;
+    SetMusicVolume(music, volumeLevel);
+    SetSoundVolume(fxCoin, volumeLevel);
+
 }
 
-static void DrawTextExCentered(Font font, const char* text, float fontSize, float spacing, Color tint)
+static void DrawTextExCentered(Font font, const char* text, float fontSize, float spacing, Color tint, int offsetY)
 {
     Vector2 position;
     position.x = GetScreenWidth() / 2 - MeasureTextEx(font, text, fontSize, spacing).x / 2;
-    position.y = GetScreenHeight() / 2 - MeasureTextEx(font, text, fontSize, spacing).y / 2;
+    position.y = GetScreenHeight() / 2 - MeasureTextEx(font, text, fontSize, spacing).y / 2 + offsetY;
     DrawTextEx(font, text, position, fontSize, spacing, tint);
 }
 
-// Credits Screen Draw logic
-void DrawCreditsScreen(void)
+// Options Screen Draw logic
+void DrawOptionsScreen(void)
 {
-    // TODO: Draw Credits screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
-    Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "Credits SCREEN", pos, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, MAROON);
-    DrawTextExCentered(font, "Coded by: Francisco Jose Palacios Marquez", TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, MAROON);
+
+    DrawTexturePro(backgroundImage, { 0.0f, 0.0f, (float)backgroundImage.width, (float)backgroundImage.height }, FULL_SCREEN_RECTANGLE, { 0, 0 }, 0, WHITE);
+
+    DrawRectangle( 3*GetScreenWidth() / 8, GetScreenHeight() / 3, GetScreenWidth() / 4, GetScreenHeight() / 20, BLACK);
+    DrawRectangle( 3*GetScreenWidth() / 8, GetScreenHeight() / 3, GetScreenWidth()/40 * selectedVolume, GetScreenHeight() / 20, DARKGREEN);
+    DrawTextExCentered(font, "Volume level", TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN, - GetScreenHeight() / 20);
+    DrawTextExCentered(font, "Press enter to go back to the main menu", TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN, 40);
 
 }
 
-
-
-// Credits Screen Unload logic
-void UnloadCreditsScreen(void)
+// Options Screen Unload logic
+void UnloadOptionsScreen(void)
 {
-    // TODO: Unload Credits screen variables here!
+    // TODO: Unload Options screen variables here!
 }
 
-// Credits Screen should finish?
-int FinishCreditsScreen(void)
+// Options Screen should finish?
+int FinishOptionsScreen(void)
 {
     return finishScreen;
 }

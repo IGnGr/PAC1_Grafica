@@ -174,6 +174,9 @@ void DrawLogoScreen(void)
         if (framesCounter > 20) DrawText("powered by", logoPositionX, logoPositionY - 27, 20, Fade(DARKGRAY, alpha));
     }*/
 
+    //Filling the screen with the logo's color
+    DrawTexturePro(backgroundImage, { 0,0,1,1 }, { 0,0, (float) GetScreenWidth(),(float)GetScreenHeight() },{0,0},0,WHITE);
+
     DrawTexture(backgroundImage, logoPositionX, logoPositionY, WHITE);
 }
 

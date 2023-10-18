@@ -19,6 +19,9 @@
     #include <emscripten/emscripten.h>
 #endif
 
+#define TITLE_FONT_SIZE font.baseSize * 2.0f
+#define STANDARD_TITLE_SPACING 4.0f
+
 
 //----------------------------------------------------------------------------------
 // Shared Variables Definition (global)
@@ -28,8 +31,11 @@ GameScreen currentScreen = LOGO;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
-#define TITLE_FONT_SIZE font.baseSize * 2.0f
-#define STANDARD_TITLE_SPACING 4.0f
+Texture2D backgroundImage;
+float volumeLevel; 
+
+int highestPointScore;
+int highestTimeScore;
 
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
@@ -55,6 +61,8 @@ static void DrawTransition(void);           // Draw transition effect (full-scre
 
 static void UpdateDrawFrame(void);          // Update and draw one frame
 
+
+
 //----------------------------------------------------------------------------------
 // Main entry point
 //----------------------------------------------------------------------------------
@@ -66,12 +74,15 @@ int main(void)
 
     InitAudioDevice();      // Initialize audio device
 
+
+    volumeLevel = 1.0f;
+
     // Load global data (assets that must be available in all screens, i.e. font)
-    font = LoadFont("resources/Music/setback.png");
+    font = LoadFont("resources/textures/setback.png");
     music = LoadMusicStream("resources/Music/MainMenuMusic.ogg");
     fxCoin = LoadSound("resources/coin.wav");
-
-    SetMusicVolume(music, 1.0f);
+    backgroundImage = LoadTexture("resources/textures/Landscape.png");
+    SetMusicVolume(music, volumeLevel);
     PlayMusicStream(music);
 
     // Setup and init first screen
@@ -109,6 +120,7 @@ int main(void)
     UnloadFont(font);
     UnloadMusicStream(music);
     UnloadSound(fxCoin);
+    UnloadTexture(backgroundImage);
 
     CloseAudioDevice();     // Close audio context
 
@@ -282,6 +294,7 @@ static void UpdateDrawFrame(void)
                 UpdateEndingScreen();
 
                 if (FinishEndingScreen() == 1) TransitionToScreen(TITLE);
+                if (FinishEndingScreen() == 3) TransitionToScreen(GAMEPLAY);
 
             } break;
             default: break;

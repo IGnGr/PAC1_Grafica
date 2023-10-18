@@ -38,9 +38,12 @@ extern GameScreen currentScreen;
 extern Font font;
 extern Music music;
 extern Sound fxCoin;
+extern Texture2D backgroundImage;
+extern float volumeLevel;
 
 #define TITLE_FONT_SIZE font.baseSize * 2.0f
 #define STANDARD_TITLE_SPACING 4.0f
+#define FULL_SCREEN_RECTANGLE {0.0f,0.0f,(float) GetScreenWidth(),(float)GetScreenHeight()}
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
@@ -102,6 +105,10 @@ void DrawCreditsScreen(void);
 void UnloadCreditsScreen(void);
 int FinishCreditsScreen(void);
 
+
+// Persistent storage functions
+bool SaveStorageValue(unsigned int position, int value);
+int LoadStorageValue(unsigned int position);
 
 #ifdef __cplusplus
 }

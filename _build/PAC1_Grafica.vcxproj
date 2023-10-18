@@ -263,13 +263,14 @@
     <ClInclude Include="..\game\src\screens.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\game\src\raylib_game.c" />
-    <ClCompile Include="..\game\src\screen_credits.c" />
-    <ClCompile Include="..\game\src\screen_ending.c" />
+    <ClCompile Include="..\game\src\IOHelper.cpp" />
+    <ClCompile Include="..\game\src\raylib_game.cpp" />
+    <ClCompile Include="..\game\src\screen_credits.cpp" />
+    <ClCompile Include="..\game\src\screen_ending.cpp" />
     <ClCompile Include="..\game\src\screen_gameplay.cpp" />
-    <ClCompile Include="..\game\src\screen_logo.c" />
-    <ClCompile Include="..\game\src\screen_options.c" />
-    <ClCompile Include="..\game\src\screen_title.c" />
+    <ClCompile Include="..\game\src\screen_logo.cpp" />
+    <ClCompile Include="..\game\src\screen_options.cpp" />
+    <ClCompile Include="..\game\src\screen_title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="raylib.vcxproj">

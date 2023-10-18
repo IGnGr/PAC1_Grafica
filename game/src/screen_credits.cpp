@@ -2,7 +2,7 @@
 *
 *   raylib - Advance Game template
 *
-*   Ending Screen Functions Definitions (Init, Update, Draw, Unload)
+*   Credits Screen Functions Definitions (Init, Update, Draw, Unload)
 *
 *   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 *
@@ -26,56 +26,70 @@
 #include "raylib.h"
 #include "screens.h"
 
+#define STANDARD_TITLE_SPACING 4.0f
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
 
+
 //----------------------------------------------------------------------------------
-// Ending Screen Functions Definition
+// Credits Screen Functions Definition
 //----------------------------------------------------------------------------------
 
-// Ending Screen Initialization logic
-void InitEndingScreen(void)
+// Credits Screen Initialization logic
+void InitCreditsScreen(void)
 {
-    // TODO: Initialize ENDING screen variables here!
+    // TODO: Initialize Credits screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+
 }
 
-// Ending Screen Update logic
-void UpdateEndingScreen(void)
+// Credits Screen Update logic
+void UpdateCreditsScreen(void)
 {
-    // TODO: Update ENDING screen variables here!
+    // TODO: Update Credits screen variables here!
 
-    // Press enter or tap to return to TITLE screen
+    // Press enter or tap to change to ENDING screen
     if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
     {
         finishScreen = 1;
         PlaySound(fxCoin);
     }
+
 }
 
-// Ending Screen Draw logic
-void DrawEndingScreen(void)
+static void DrawTextExCentered(Font font, const char* text, float fontSize, float spacing, Color tint, int offsetY)
 {
-    // TODO: Draw ENDING screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLUE);
+    Vector2 position;
+    position.x = GetScreenWidth() / 2 - MeasureTextEx(font, text, fontSize, spacing).x / 2 ;
+    position.y = GetScreenHeight() / 2 - MeasureTextEx(font, text, fontSize, spacing).y / 2 + offsetY;
+    DrawTextEx(font, text, position, fontSize, spacing, tint);
+}
 
+// Credits Screen Draw logic
+void DrawCreditsScreen(void)
+{
+    // TODO: Draw Credits screen here!
+    DrawTexturePro(backgroundImage, { 0.0f, 0.0f, (float)backgroundImage.width, (float)backgroundImage.height }, FULL_SCREEN_RECTANGLE, { 0, 0 }, 0, WHITE);
     Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "ENDING SCREEN", pos, font.baseSize*3.0f, 4, DARKBLUE);
-    DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+    DrawTextExCentered(font, "Coded by: Francisco Jose Palacios Marquez", TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN, 0);
+    DrawTextExCentered(font, "Press enter to go back to the main menu", TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN, 50);
+
 }
 
-// Ending Screen Unload logic
-void UnloadEndingScreen(void)
+
+
+// Credits Screen Unload logic
+void UnloadCreditsScreen(void)
 {
-    // TODO: Unload ENDING screen variables here!
+    // TODO: Unload Credits screen variables here!
 }
 
-// Ending Screen should finish?
-int FinishEndingScreen(void)
+// Credits Screen should finish?
+int FinishCreditsScreen(void)
 {
     return finishScreen;
 }

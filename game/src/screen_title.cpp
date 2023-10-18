@@ -31,6 +31,8 @@
 #define OPTIONS_TEXT "OPTIONS" 
 #define CREDITS_TEXT "CREDITS" 
 #define PLAY_TEXT "PLAY"
+
+
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
@@ -51,6 +53,7 @@ static bool hasPressedEntered = false;
 GameScreen menuOptions[MAX_OPTIONS] = { GAMEPLAY,OPTIONS,CREDITS };
 Texture2D titleImage = { 0 };
 Texture2D cursorImage = { 0 };
+
 Sound cursorSound = { 0 };
 //----------------------------------------------------------------------------------
 // Title Screen Functions Definition
@@ -68,6 +71,10 @@ void InitTitleScreen(void)
     titleImage = LoadTexture("resources/textures/pixil-frame-0.png");
     cursorImage = LoadTexture("resources/textures/SpaceShip.png");
     cursorSound = LoadSound("resources/Sounds/shot.wav");
+
+    SetSoundVolume(cursorSound, volumeLevel);
+
+    if(!IsMusicStreamPlaying(music)) PlayMusicStream(music);
 
     
     if (!hasPressedEntered)
@@ -139,26 +146,25 @@ void UpdateTitleScreen(void)
 void DrawTitleScreen(void)
 {
     // TODO: Draw TITLE screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
+    DrawTexturePro(backgroundImage, { 0.0f, 0.0f, (float)backgroundImage.width, (float)backgroundImage.height }, FULL_SCREEN_RECTANGLE, { 0, 0 }, 0, WHITE);
 
     if (!hasPressedEntered)
     {
-        DrawTextEx(font, PRESS_ENTER_TEXT, (Vector2) { pressEnterPositionX, pressEnterPositionY }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, Fade(DARKGREEN, alpha));
+        DrawTextEx(font, PRESS_ENTER_TEXT, { (float) pressEnterPositionX,(float) pressEnterPositionY }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, Fade(DARKGREEN, alpha));
     }
 
     if (hasPressedEntered)
     {
-        DrawTextEx(font, PLAY_TEXT, (Vector2) { GetScreenWidth() / 2 - MeasureTextEx(font, PLAY_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2, pressEnterPositionY }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
-        DrawTextEx(font, OPTIONS_TEXT, (Vector2) { GetScreenWidth() / 2 - MeasureTextEx(font, OPTIONS_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2, pressEnterPositionY + offsetBetweenMenuOptions }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
-        DrawTextEx(font, CREDITS_TEXT, (Vector2) { GetScreenWidth() / 2 - MeasureTextEx(font, CREDITS_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2, pressEnterPositionY + offsetBetweenMenuOptions * 2 }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
-        DrawTextureEx(cursorImage, (Vector2) { pressEnterPositionX - cursorImage.width * 2, pressEnterPositionY + cursorIndex * offsetBetweenMenuOptions }, 0, 1, WHITE);
+        DrawTextEx(font, PLAY_TEXT,  { (float) GetScreenWidth() / 2 - MeasureTextEx(font, PLAY_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2,  (float) pressEnterPositionY }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
+        DrawTextEx(font, OPTIONS_TEXT,  { GetScreenWidth() / 2 - MeasureTextEx(font, OPTIONS_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2,  (float) pressEnterPositionY + offsetBetweenMenuOptions }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
+        DrawTextEx(font, CREDITS_TEXT,  { GetScreenWidth() / 2 - MeasureTextEx(font, CREDITS_TEXT, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING).x / 2,  (float) pressEnterPositionY + offsetBetweenMenuOptions * 2 }, TITLE_FONT_SIZE, STANDARD_TITLE_SPACING, DARKGREEN);
+        DrawTextureEx(cursorImage,  { (float)pressEnterPositionX - cursorImage.width * 2,  (float)pressEnterPositionY + cursorIndex * offsetBetweenMenuOptions }, 0, 1, WHITE);
     }
 
     //DrawText("+", pressEnterPositionX - 25, pressEnterPositionY + cursorIndex * 50, font.baseSize, MAROON);
 
 
-    DrawTextureEx(titleImage, (Vector2){ finalLogoPositionX, currentLogoPositionY }, 0, 3, WHITE);
-
+    DrawTextureEx(titleImage, { (float) finalLogoPositionX,  (float)currentLogoPositionY }, 0, 3, WHITE);
 
 
 }
@@ -167,9 +173,9 @@ void DrawTitleScreen(void)
 void UnloadTitleScreen(void)
 {
     // TODO: Unload TITLE screen variables here!
-    UnloadTexture(titleImage);
-    UnloadTexture(cursorImage);
-    UnloadSound(cursorSound);
+    //UnloadTexture(titleImage);
+    //UnloadTexture(cursorImage);
+    //UnloadSound(cursorSound);
 }
 
 // Title Screen should finish?

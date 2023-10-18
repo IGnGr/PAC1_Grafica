@@ -14,25 +14,28 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\game\src\raylib_game.c">
+    <ClCompile Include="..\game\src\raylib_game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\src\screen_ending.c">
+    <ClCompile Include="..\game\src\screen_ending.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\game\src\screen_gameplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\src\screen_logo.c">
+    <ClCompile Include="..\game\src\screen_logo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\src\screen_options.c">
+    <ClCompile Include="..\game\src\screen_options.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\src\screen_title.c">
+    <ClCompile Include="..\game\src\screen_title.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\src\screen_credits.c">
+    <ClCompile Include="..\game\src\screen_credits.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\src\IOHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
